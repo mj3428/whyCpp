@@ -1,4 +1,5 @@
-# 结构
+# 基础
+## 结构
 构建一个新类型第一步是把所需的元素组织成一种数据结构
 ```
 struct Vector{
@@ -32,4 +33,45 @@ double read_and_sum(int s)
     sum += v.elem[i]; // 计算元素的和
   return sum;
 }
+```
+
+## 类
+类含有一些列成员，可能是数据、函数或者类型。类的public成员定义该类的接口，private成员则只能通过接口访问。例如：
+```
+class Vector{
+public:
+  Vector(int s) :elem{new double[s]}, sz{s}{} // 构建一个Vector
+  double& operator[](int i){ return elem[i];} // 通过下标访问元素
+  int size(){return sz;}
+private:
+  double* elem; //指向元素的指针
+  int sz; //元素的数量
+};
+```
+
+**解析:**  
+* 与类名同名的函数成为构造函数，作用是初始化类的对象。而上述的Vector(int)的构造函数里面int指定元素的数量。  
+* `:elem{new double[s]},sz{s}`首先从自由空间获取s个double类型的元素，并用一个指向这些元素的指针初始化elem；然后用s初始化sz。  
+* 访问元素的功能是由一个下标函数提供的的，这个函数名为operator[]，它的返回值是对相应元素的引用(double&);  
+
+## 枚举
+```
+enum class Color{red, blue, green};
+enum class Traffic_light{green, yellow, red};
+
+Color col = Color::red;
+Traffic_light light = Traffic_light::red;
+```
+enum class中class是指明了枚举是强类型的  
+变量名相同，所以枚举的目的是为了防止冲突；**比如:**  
+```
+Color x = red;  // 错误:哪个red?
+Color y = Traffic_light::red;  // 错误:这个red不是color的对象
+Color z = Color::red;  //正确
+```
+
+并且不能隐式混用类型
+```
+int i = Color::red; //错误:Color::red不是整型
+Color c = 2;  //错误:2不是一个Color对象
 ```
