@@ -75,3 +75,31 @@ Color z = Color::red;  //正确
 int i = Color::red; //错误:Color::red不是整型
 Color c = 2;  //错误:2不是一个Color对象
 ```
+## 模块化
+### 分离编译
+一般情况下，我们把描述接口的声明放置在一个特定的文件中，文件命往往指示模块的预期用途。
+```
+class Vector{
+public:
+  Vector(int s) 
+  double& operator[](int i)
+  int size(){return sz;}
+private:
+  double* elem; //elem指向一个数组，该数组包含sz个double
+  int sz; 
+};
+```
+这段声明被置于Vector.h中，我们称这种文件为头文件，用户将其包含(include)进程序以访问接口。**例如：**  
+// user.cpp
+```
+# include "Vector.h"  //获得Vector接口
+# include <cmath> //获得标准库数学函数接口，其中含有sqrt()
+using namespace std;
+double sqrt_sum(Vector& v)
+{
+  double sum = 0;
+  for (int i=0;i!=v.size();++i)
+    sum+=sqrt(v[i]);  // 平方根的和
+  return sum;
+}
+```
