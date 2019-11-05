@@ -116,5 +116,29 @@ public:
   virtual Container(){} //析构函数
 };
 ```
+
 关键字virtual的意思是“可能随后在其派生类中重新定义”。关键字virtual声明的函数称为虚函数。Container的派生类负责为Container接口提供
-具体实现。看起来有点奇怪的=0说明该函数是纯虚函数，意味着Container的派生类必须定义这个函数。  
+具体实现。看起来有点奇怪的=0说明该函数是纯虚函数，意味着Container的派生类必须定义这个函数。含有纯虚函数的类称为抽象类(abstract class)  
+Container的用法是:  
+```
+void use(Container& c)
+{
+  const int sz = c.size();
+  
+  for (int i=0;i!=sz;++i)
+    cout<<c[i]<<'\n';
+}
+```
+
+一个容器为了实现抽象类Container接口所需的函数，可以使用具体类Vector:
+```
+class Vector_container: public Container{ // Vector_container实现了Container
+  Vector v;
+public:
+  Vector_container(int s):v(s){}  //  含有s个元素的Vector
+  Vector_container(){}
+  
+  double& operator[](int i){return v[i];}
+  int size() const{return v.size();}
+}
+```
