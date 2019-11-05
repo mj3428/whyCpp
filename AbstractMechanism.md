@@ -59,6 +59,62 @@ public:
   {
     for (int i=0;i!=s;++i) elem[i]=0; //  初始化元素
   }
-}
+  Vector(){delete[] elem;}  // 析构函数：释放资源
   
+  double& operator[](int i);
+  int size() const;
+};
 ```
+
+析构函数的命名规则是一个求补运算符~后接类的名字，从含以上来说它是构造函数的补充。Vector的构造函数使用new运算符从自由存储（也称为堆或
+动态存储）分配一些内存空间，析构函数则使用delete运算符释放该空间以达到清理资源的目的。这一切都无须Vector的使用者干预，他们只需要像
+使用普通的内置类型变量那样使用Vector对象就可以了。  
+```
+void fct(int n)
+{
+  Vector v(n);  // ...使用v...
+  {
+    Vector v2(2*n);
+    //...使用v和v2...
+  } //v2在此处被销毁
+  // ...使用v...
+} //  v在此处被销毁
+```
+### 具类里初始化容器
+两种简洁途径:  
+* 初始化器列表构造函数(Initializer-list constructor):使用元素的列表进行初始化;
+* push_back():在序列的末尾添加一个新元素.
+它们的声明形式如下所示:  
+```
+class Vector{
+public:
+  Vector(std::initializer_list<double>);  // 使用一个列表进行初始化
+  // ...
+  void push_back(double); // 在末尾添加一个元素，容器的长度加1
+  // ...
+};
+```
+其中，push_back()可用于添加任意数量的元素。例如:
+```
+Vector read(istream& is)
+{
+  Vector v;
+  for (douoble d; is>>d;) // 将浮点值读入d
+    v.push_back(d); // 把d加到v当中
+  return v;
+}
+```
+### 抽象类型
+complex和Vector等类型之所以被称为具体类型(concrete type),是因为它们的表现形式属于定义的一部分。在这一点上,它们与内置类型很相似。
+相反,抽象类型(abstract type)则将使用者与类的实现细节完全隔离开来。为了做到这一点,我们分离接口与表现形并且放弃了纯局部变量。  
+首先，我们为Container类设计接口，Container类可以看成是比Vector更抽象的一个版本:
+```
+class Container{
+public:
+  virtual double& operatorp[](int) = 0; //纯虚函数
+  virtual int size() const = 0; //常量成员函数
+  virtual Container(){} //析构函数
+};
+```
+关键字virtual的意思是“可能随后在其派生类中重新定义”。关键字virtual声明的函数称为虚函数。Container的派生类负责为Container接口提供
+具体实现。看起来有点奇怪的=0说明该函数是纯虚函数，意味着Container的派生类必须定义这个函数。  
