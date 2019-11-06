@@ -261,4 +261,13 @@ private:
 ```
 
 成员函数push_back()把它的实参添加给vector(此处是eyes),每次将向量的长度加1.  
-通过调用Smiley的基类(Circle)的draw()和Simley的成员(eyes)的draw()来定义
+通过调用Smiley的基类(Circle)的draw()和Simley的成员(eyes)的draw()来定义Smiley::draw()：
+```
+void Smiley::draw()
+{
+  Circle::draw();
+  for (auto p:eyes)
+    p -> draw();
+    mouth->draw();
+}
+```
