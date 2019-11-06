@@ -191,3 +191,48 @@ void use(Container& c)
     cout << c[i] << '\n';
 }
 ```
+
+一个有趣的问题是:use()中的c[i]是如何解析到正确的operator[]()的？当h()调用品use()时，必须调用Lisr_container的operator[]();而当g()
+调用use()时，必须调用Vector_container的operator[]()。要想达到这种效果，Container对象就必须包含一些有助于它在运行时选择正确函数的信息。
+### 类层次
+Container是一个非常简单的类层次的例子,所谓类层次(class hierarchy)是指通过派生(如:public)创建的一组类,在框架中有序排列。
+我们使用类层次表示具有层次关系的概念,比如“消防车是卡车的一种,卡车是车辆的一种”以及“笑脸是一个圆,圆是一个形状”。  
+例如，Circle类派生自Shape类。要想把上面这个简单的图例写成代码，我们首先需要说明一个类，令其定义所有这些形状的公共属性:
+```
+class Shape{
+public:
+  virtual Point center() const=0; //  纯虚函数
+  virtual void move(Point to)=0;
+  
+  virtual void draw() const=0;  //  在当前“画布”上绘制
+  virtual void rotate(int angle)=0;
+  
+  virtual ~Shape(){}  //  析构函数
+  //...
+};
+```
+
+基于上面的定义，我们就能编写函数令其操纵由形状指针组成的向量了:
+```
+void rotate_all(vector<Shape*>& v, int angle) //  将v的元素按照指定角度旋转
+{
+  for (auto p:v)
+    p->rotate(angle);
+}
+```
+
+要定义一种具体的形状，首先必须指明它是一个Shape,然后再规定其特有的属性（包括虚函数）：
+```
+class Circle:public Shape{
+public:
+  Circle(Point p, int rr);  //  构造函数
+  Point center() const{return x;}
+  void move(Point to){x=to;}
+  
+  void draw() const;
+  void rotate(int){}  //  一个简单明了的示例算法
+private:
+  Point x;  //  圆心
+  int r;  //  半径
+}
+```
