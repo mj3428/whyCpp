@@ -142,3 +142,28 @@ public:
   int size() const{return v.size();}
 }
 ```
+public可读作“派生自”或“是 的子类型”。我们说Vector_container类派生(derived)自Container类,而Container类是Vector-container类的
+基类(base),还有另外一种叫法,分别把Vector_container和Container叫做子类(subclass)和超类(superclass)。派生类从它的基类继承成员,所
+以我们通常把基类和派生类的这种关联关系叫做继承(inheritance)。  
+成员operatorD()和size()覆盖(override)了基类Container中对应的成员。析构函数~Vector_container()则覆盖了基类的析构函数Container()。
+注意,成员v的析构函数(~Vector())被其类的析构函数(~Vector-container())隐式调用.  
+因为use()只知道Container的接口而不了解Vector_container，因此对于Container的其他实现，use()仍能正常工作。例如:
+```
+class List_container: public Container{// List_container实现了Container
+  std::list<double> ld; //  一个double类型的标准库list
+public:
+  List_container(){}  //  空列表
+  List_container(initializer_list<double>il):ld{il}{}
+  ~List_container(){}
+  double& operatorp[](int i);
+  int size() const {return ld.size();}
+};
+double& List_container::operator[](int i)
+{
+  for (auto&:ld){
+    if(i==0)return x;
+    --i;
+  }
+  throw out_of_range("List container");
+}
+```
