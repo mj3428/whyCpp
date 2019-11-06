@@ -1,4 +1,4 @@
-# 抽象机制
+# 抽象机制1
 ## 类
 ### 具类下的一种算术类型
 一种“经典的用户自定义算术类型”是complex
@@ -236,3 +236,29 @@ private:
   int r;  //  半径
 }
 ```
+
+Shape和Circle涉及的语法知识并不比Container和Vector_container多多少，但是我们可以继续构造:
+```
+class Simley: public Circle{  //  使用Circle作为笑脸的基类
+public:
+  Smile(Point p,int r):Circle{p,r},mouth{nullptr}{}
+  ~Smiley()
+  {
+  delte mouth;
+  for (auto p:eyes) deletep;
+  }
+  void move(Point to);
+  void draw() const;
+  void rotate(int);
+  void add_eye(Shape* s){eye.push_back(s);}
+  void set_mouth(Shape* s);
+  virtual void wink(int i); //  眨眼数i
+  // ...
+private:
+  vector <Shape*>eyes;  //  通常包含两只眼睛
+  Shape* mouth;
+};
+```
+
+成员函数push_back()把它的实参添加给vector(此处是eyes),每次将向量的长度加1.  
+通过调用Smiley的基类(Circle)的draw()和Simley的成员(eyes)的draw()来定义
