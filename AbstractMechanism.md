@@ -167,3 +167,14 @@ double& List_container::operator[](int i)
   throw out_of_range("List container");
 }
 ```
+
+在上述代码中，类的表现形式是一个标准库list<double>。一般情况下，我们不会用list实现一个带下标的容器，毕竟list取下标的性能很难与vector相比。  
+我们可以通过一个函数创建一个List_container，然后让use()使用它:  
+```
+void h()
+{
+  List_container lc ={1,2,3,4,5,6,7,8,9};
+  use(lc);
+}
+```
+  
