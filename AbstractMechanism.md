@@ -177,4 +177,17 @@ void h()
   use(lc);
 }
 ```
-  
+
+这段代码的关键点是use(Container&)并不清楚它的实参是Vector_container, List_container,还是其他什么容器,它也根本不需要知道。
+它只要了解Container定义的接口就可以了。因此,不论List_container的实现发生了改变还是我们使用了Container的一个全新派生类,
+都需要i编译use(Container&)  
+### 虚函数
+进一步思考Cointainer的用法:
+```
+void use(Container& c)
+{
+  const int sz = c.size();
+  for (int i=0;i!=sz;++i)
+    cout << c[i] << '\n';
+}
+```
