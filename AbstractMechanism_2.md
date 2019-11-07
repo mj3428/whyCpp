@@ -46,3 +46,21 @@ Vector::Vector(const Vector& a) //  复制构造函数
 通过定义构造函数、拷贝操作、移动操作和析构函数,程序员就能对受控资源(比如容器中的元素)的全生命周期进行管理。而且移动构造函数还允
 许对象从一个作用域简单便捷 ,地移动到另一个作用域。采取这种方式,我们不能或不希望拷贝到作用域之外的对象就能简单高效地移动出去了。不妨以表示并发
 活动的标准库thread和含有百万个double的Vector为例,前者“不能”执行拷贝操作,而后者我们“不希望”拷贝它。
+```
+std::vector<thread>my_threads;
+Vector init(int n)
+{
+  thread t {heartbeat}; //  同时运行到heartbeat(在它自己的线程上)
+  my_threads.push_back()  // 把t移动到my_threads
+  //..其他初始化部分
+  Vector vec(n);
+  for (int i=0;i<vec.size();++i) vec[i]=777;
+  return vec; //  把vec移动到init()之外
+}
+auto v = init(); // 启动heartbeat,初始化v
+```
+就像替换掉程序中的new和delete一样,我们也可以把指针转化为资源句柄。在这两种情况下,都将得到更简单也更易维护的代码,而且没什么额外的开
+销。特别是我们能·实现强资源安全(strong resource safety),换句话说,对于一般概念上的资源,这种方法都可以消除资源泄漏。比如存放内存
+的vector、存放系统线程的thread和存放文件句柄的fstream。  
+### 抑制操作
+
