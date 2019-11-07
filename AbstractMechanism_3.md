@@ -68,3 +68,39 @@ void fct(int n,const string & s)
   bool b2 = lts(s); //  如果s<"Backus"则为真
 }
 ```
+
+### 可变参数模板
+定义模板时，可以令其接受任意数量任意类型的实参，这样的模板称为可变参数模板
+```
+template<typename T,typename... Tail>
+void f(T head,Tail... tail)
+{
+  g(head);  //  对head做某些操作
+  f(tail...); // 再次处理tail
+}
+
+void f(){}  // 不执行任何操作
+```
+实现可变参数模板的关键时：当你传给它多个参数时，谨记把第一个参数和其他参数区分对待。此处，我没首先处理第一个参数(head)，然后使用剩余参数
+(tail)递归地调用f()。省略号...表示列表的“剩余部分”。最终tail将变空，我们需要另外一个独立的函数来处理它。  
+调用f()的形式如下:
+```
+int main()
+{
+  cout << "first:";
+  f(1,2.2,"hello");
+  cout << "\nsecond:"
+  f(0.2,'c',"yuck!",0,1,2);
+  cout << "\n";
+}
+```
+上面的程序首先调用f(1,2.2,"hello"),然后调用f(2.2,"hello"),接着调用f("hello")，最终调用f().g(head)又会做上面呢？显然，在一个真是的程序
+中，它将完成我们希望对每个实参执行的操作。例如，我们想要输出实参(这里是head):
+```
+template<typename T>
+void g(T x)
+{
+  cout << x <<"";
+}
+```
+而输出的内容为 `first:1 2.2 hello` 和 `second: 0.2 c yuck! 0 1 2`
