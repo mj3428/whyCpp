@@ -30,3 +30,14 @@ public:
 }
 ```
 
+对于Vector来说，拷贝构造函数的正确定义应该首先为指定数量的元素分配空间，然后元素复制到空间中。这样在复制完成后，每个Vector就拥有自己的
+元素副本了:
+```
+Vector::Vector(const Vector& a) //  复制构造函数
+      :elem{new double[sz]},  //  为元素分配空间
+      sz{a.sz}
+{
+  for (int i=0;i!=sz;++i) //  复制元素
+    elem[i] = a.elem[i];
+}
+```
