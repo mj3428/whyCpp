@@ -25,7 +25,7 @@ istream& operator>>(istream& is,Entry& e)
   //  读取{"name",number}对。注意，正确的格式包含{""和}
 {
   char c,c2;
-  if(is>>c & c=='{'&&is>>c2 && c2==""){ //  以一个{"开始
+  if(is>>c && c=='{'&&is>>c2 && c2==""){ //  以一个{"开始
     string name;  //  string的默认值是空字符串""
     while (is.get(c)&&c!="")  //  "之前的任何内容都是名字的一部分
       name+=c;
@@ -42,3 +42,6 @@ istream& operator>>(istream& is,Entry& e)
     return is;
 }
 ```
+输入运算符返回它所操作的istream对象的引用，该引用可用来检测操作是否成功。例如当用作一个条件时，is>>C表示“我们从is读取数据存入c的操作
+成功了吗？”  
+is>>c默认跳过空白符，而is.get(c)则不会，因此，上面的Entry的输入运算符忽略(跳过)名字字符串外围的空白符，但不会忽略其内部的空白符。
