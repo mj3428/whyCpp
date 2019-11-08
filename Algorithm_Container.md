@@ -101,3 +101,22 @@ void input()
     phone_book.push_back(e);
 }
 ```
+
+在赋值和初始化时，vector可以被拷贝.例如:`vector<Entry> book2 = phone_book;`  
+Vec继承了vector除下标运算符之外的所有内容，它重定义了下标运算符来进行范围检查。vector的at()函数同样负责下标操作，但它会在参数越界时
+抛出一个类型为out_of_range的异常。  
+对于一个Vec对象来说，越界访问会抛出一个用户可捕获的异常，例如:
+```
+void checked(Vec<ENtry>& book)
+{
+  try{
+    book[book.size()] = {"Joe",999999}; //  会抛出一个异常
+  }
+  catch (out_of_range){
+    cout << "range error\n";
+  }
+}
+```
+
+这段程序会抛出一个异常,然后将其捕获。如果用户不捕获异常,则程序会以一种定义良好的方式退出,而不是继续执行
+或者以一种未定义的方式终止。一种尽量弱化未捕获异常影响try-块作为main()函数的函数体
