@@ -57,6 +57,9 @@ for (Entry ee;cin>>ee;) // 从cin读取数据存入ee
 {"John Marwood Cleese", 123456}
 {Michael Edward Palin", 987654}
 ```
+
+## 容器
+### Vector
 用一组值来初始化vector，当然,值的类型必须与vector元素类型吻合:
 ```
 vector<Entry> phone_book = {
