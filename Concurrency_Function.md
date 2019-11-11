@@ -64,3 +64,19 @@ void f()
   sh+=7; // 处理共享数据
 } // 隐式释放mutex
 ```
+
+标准库提供了一个同时获取多个锁的操作，可以解决访问多个资源带来的死锁问题:
+```
+void f()
+{
+  // ...
+  unique_lock<mutex> lck1 {m1,defer_lock};  // 推迟加锁:还为尝试获取mutex
+  unique_lock<mutex> lck2 {m2,defer_lock};
+  unique_lock<mutex> lck3 {m3,defer_lock};
+  //...
+  lock(lck1,lck2,lck3); // 获取全部三个锁
+  //...处理共享数据..
+} // 隐式释放所有mutex
+```
+lock()调用只有在获取了全部mutex实参后才会继续执行，当它持有mutex时，绝不会阻塞("睡眠")，当然也就不会导致死锁。unique_lock的析构函数
+保证了当thread离开作用域时mutex会被释放.  
