@@ -118,3 +118,23 @@ for (string line;getline(cin,line);){ //  把数据读入缓冲区
 `regex_search(line,matches,pat)`负责在读入的line中查找所有符合模式pat的子串.如果找到了，把它们存入matches中;如果没找到,
 regex_search(line,matches,pat)返回false。matches的类型是smatch，其中字符"s"表示"子(sub)"或"字符串(string)"，所以smatch就是一个
 包含string类型匹配子串的vector.代码中的第一个元素matches[0]是匹配得到的结果。  
+
+## 数学计算
+### 随机数
+随机数生成器包括两部分:  
+1. 一个引擎(engine)，负责生成一组随机值或者伪随机值
+2. 一种分布(distribution)，负责把引擎产生的值映射到某个数学分布上。
+常用的分布包括uniform_int_distribution（生成的所有整数概率相等）、normal_distribution（正态分布，又名“铃铛曲线”）和
+exponential_distribution（指数增长），它们的范围各不相同。例如:
+```
+using my_engine = default_random_engine;  // 引擎类型
+using my_distribution = uniform_int_distribution<>; //  分布类型
+
+my_engine re {};  //  默认引擎
+my_distribution one_to_six{1,6};  // 该分布把随机数映射到1~6的范围
+auto die = bind(one_to_six,re); // 得到一个随机数生成器
+
+int x = die();  //  掷骰子：x得到的值位于1~6之间
+```
+标准库函数bind()生成一个函数对象,它会把第2个参数(re)作为实参绑定到第一个·参数( oneto-six函数对象)的调用中。因此,调用die()
+等价于调用one to_six(re)
