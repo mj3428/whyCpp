@@ -80,3 +80,41 @@ void f()
 ```
 lock()调用只有在获取了全部mutex实参后才会继续执行，当它持有mutex时，绝不会阻塞("睡眠")，当然也就不会导致死锁。unique_lock的析构函数
 保证了当thread离开作用域时mutex会被释放.  
+**async()**  
+如需启动异步运行的任务，我们可以使用async()：
+```
+double comp4(vector<double>& v)
+  // 如果v足够大，则创建很多任务
+{
+  if (v.size()<10000) return accum(v.begin(),v.end(),0.0);
+  
+  auto v0 = &v[0];
+  auto sz = v.size();
+  
+  auto f0 = async(accum,v0,v0+sz/4,0.0);  //  第一个四分之一
+  auto f1 = async(accum,v0+sz/4,v0+sz/2,0.0);  //  第二个四分之一
+  auto f2 = async(accum,v0+sz/2,v0+sz*3/4,0.0); // 第三个四分之一
+  auto f3 = async(accaum,v0+sz*3/4,v0+sz,0.0);  //  第四个四分之一
+  
+  return f0.get()+f1.get()+f2.get()+f3.get(); //  收集并组合结果
+}
+```
+async()将一个函数调用的“调用部分”和“获取结果部分”分离开来,并将这两部分与任务的实际执行分离开来。通过使用async(),你不必再操心
+线程和锁,而只需考虑可能异步执行的任务。这种做法显然受到了限制:不要试图对共享资源且需要用锁机制的任务使用async()————使用async(),你甚至
+不知道要使用多少个thread,因为这是由async()来决定的,它根据它所了解的调用发生时系统可用资源量来确定使用多少个thread。
+例如, async()会先检查有多少可用核(处理器)再确定启动多少thread.  
+
+## 正则表达式
+正则表达式最常见的应用场景是在数据流中搜索符合某一模式的字符串：
+```
+int lineno = 0;
+for (string line;getline(cin,line);){ //  把数据读入缓冲区
+  ++lineno;
+  smatch matches; //  用于存放匹配的字符串
+  if (regex_search(line,matches,pat)) //  在一行字符串中查找符合模式pat的字串
+    cout << lineno << ":" << matches[0] << '\n';
+```
+
+`regex_search(line,matches,pat)`负责在读入的line中查找所有符合模式pat的子串.如果找到了，把它们存入matches中;如果没找到,
+regex_search(line,matches,pat)返回false。matches的类型是smatch，其中字符"s"表示"子(sub)"或"字符串(string)"，所以smatch就是一个
+包含string类型匹配子串的vector.代码中的第一个元素matches[0]是匹配得到的结果。  
