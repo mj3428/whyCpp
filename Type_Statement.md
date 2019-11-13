@@ -63,3 +63,24 @@ void g(char c, signed char sc, unsigned char uc)
   uc = c; // ok 转换成无符号类型
 }
 ```
+
+### 整数类型
+后缀U用于显式指定unsigned字面值常量，与之类似，后缀L用于显式指定long字面值常量。例如3U的类型时unsigned int而3L的类型时long int。  
+多个后缀可以组合在一起使用，例如:`cout << 0xF0UL << '' << 0LU << '\n';`  
+**前缀与后缀:**  
+```
+1UL //  unsigned long
+2UL //  unsigned long
+3ULL  //   unsigned long long
+4LLU  //  unsigned long long
+5LUL  //  错误
+```
+同样，后缀l和L也能用于表示浮点数字面值常量，表达的类型是long double
+```
+1L  // long int
+1.0L  // long double
+```
+
+### void
+从语法结构上来说,void属于基本类型。但是它只能被用作其他复杂类型的一部分，不存在任何void类型的对象。void有两个作用:一是作为函数的返回类型
+用以说明函数不返回任何实际的值；二是作为指针的基本类型部分以表明指针所指对象的类型未知。
