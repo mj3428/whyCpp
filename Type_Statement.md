@@ -39,3 +39,27 @@ void digits()
 ```
 上面的代码把10个阿拉伯数字输出到cout。字符字面值常量0,先转换成它对应的整数值, ,再与i相加;所得的int再转回char并被输出到cout。
 '0'+i得到的结果本来是一个int,因此如果不加上static-cast的话,输出的结果将会是48, 49 ...而不是0, 1...
+
+我们不能混用char\signed char\unsigned char这3种字符类型的指针,如:
+```
+void f(char c,signed char sc,unsigned char uc)
+{
+  char* pc = &uc; //错误:不存在对应的指针转换规则
+  signed char* psc = pc;  //  错误:不存在对应的指针转换规则
+  unsigned char* puc = pc;  //  错误:不存在对应的指针转换规则
+  psc = puc;  //  错误:不存在对应的指针转换规则
+}
+```
+3种char类型的变量可以互相赋值，但是把一个特别大的赋值给带符号的char是未定义的行为，例如:
+```
+void g(char c, signed char sc, unsigned char uc)
+{
+  c = 255;  //如果普通的char是带符号的且占8位，则该语句的行为依赖于具体实现
+  c = sc; // OK
+  c = uc; // 如果普通的char是带符号的且uc的值特别大，则该语句的行为依赖于具体实现
+  sc = uc;  // 如果uc的值特别大，则该语句的行为依赖于具体实现
+  uc = sc;  // OK转换成无符号类型
+  sc = c; // 如果普通的char是无符号的且uc的值特别大,则该语句的行为依赖于具体实现
+  uc = c; // ok 转换成无符号类型
+}
+```
