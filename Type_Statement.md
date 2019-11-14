@@ -84,3 +84,25 @@ void g(char c, signed char sc, unsigned char uc)
 ### void
 从语法结构上来说,void属于基本类型。但是它只能被用作其他复杂类型的一部分，不存在任何void类型的对象。void有两个作用:一是作为函数的返回类型
 用以说明函数不返回任何实际的值；二是作为指针的基本类型部分以表明指针所指对象的类型未知。
+```
+void x; //  错误:不存在void类型的对象
+void& r;  //  错误：不存在void的引用
+void f(); //  函数f不返回任何实际的值
+void* pv; //  指针所指的对象类型未知
+```
+当我们声明一个函数时,必须指明返回结果的数据类型。从逻辑上来说,如果某个函数不返回任何值,也许我们会希望直接忽略掉返回值部分。
+但其实这种想法并不可行,它会违反 C++的语法规则( §iso.A)。因此,我们使用void表示函数的返回值为空,此时void可以看成是一种“伪返回类型”  
+
+### 类型尺寸
+所有C++对象的尺寸都可以表示成char尺寸的整数倍,因此如果我们令char的尺寸 ,为1,则使用sizeof运算符就能得到任意类型或对象的尺寸。
+下面是C++对于基本类型尺寸的一些规定:  
+* 1=sizeof(char)≤sizeof(short)≤sizeof(int)≤sizeof(long)≤sizeof(long long)
+* 1≤sizeod(bool)≤sizeof(long)
+* sizeof(char)≤sizeof(wchar_t)≤sizeof(long)
+* sizeof(float)≤sizeof(double)≤sizeof(long double)
+* sizeof(N)=sizeof(signed N)=sizeof(unsigned N)
+其中,最后一行的N可以是char, short, int, long或者long long, C++规定char至少占8位, short至少占16位, long至少占32位。
+char应该能存放机器字符集中的任意字符,它的实际类型依赖于实现并确保是当前机器上最适合保存和操作字符的类型。通常情况下, char占据一个8位的字节。
+与之类似, int的实际类型也是依赖于实现的,并确保是当 ,前机器上最适合保存和操作整数的类型。int通常占据一个4字节(32位)的字。
+上面这些假设是比较恰当的,但是我们很难做更多设定。比如,我们只能说char “通常”占据8位,因为确实也存在char占32位的机器。
+又比如我们决不能假定int和指针的尺寸一样大,因为在很多机器上("64位体系结构”)指针的尺寸比整数大。  
