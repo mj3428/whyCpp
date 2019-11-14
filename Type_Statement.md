@@ -100,7 +100,8 @@ void* pv; //  指针所指的对象类型未知
 * 1≤sizeod(bool)≤sizeof(long)
 * sizeof(char)≤sizeof(wchar_t)≤sizeof(long)
 * sizeof(float)≤sizeof(double)≤sizeof(long double)
-* sizeof(N)=sizeof(signed N)=sizeof(unsigned N)
+* sizeof(N)=sizeof(signed N)=sizeof(unsigned N)  
+
 其中,最后一行的N可以是char, short, int, long或者long long, C++规定char至少占8位, short至少占16位, long至少占32位。
 char应该能存放机器字符集中的任意字符,它的实际类型依赖于实现并确保是当前机器上最适合保存和操作字符的类型。通常情况下, char占据一个8位的字节。
 与之类似, int的实际类型也是依赖于实现的,并确保是当 ,前机器上最适合保存和操作整数的类型。int通常占据一个4字节(32位)的字。
