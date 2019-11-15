@@ -51,3 +51,13 @@ void f5(int x)
 }
 ```
 因为x在同一个作用域中定义了两次，所以上述程序存在错误.  
+在for语句中引入的名字是该语句的局部名字(位于语句作用域内)。因此,在同一个函我们可以在好几个循环中使用同一个便于理解的名字。例如:
+```
+void f(vector<string>& v,list<int>& lst)
+{
+  for (vonst auto& x:v) cout << x << '\n';
+  for (auto x:lst) cout << x <<'\n';
+  for (int i = 0,i!=v.size(),++i) cout << v[i] << '\n';
+  for (auto i:{1,2,3,4,5,6,7}) cout << i << '\n';
+}
+```
