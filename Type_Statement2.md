@@ -61,3 +61,4 @@ void f(vector<string>& v,list<int>& lst)
   for (auto i:{1,2,3,4,5,6,7}) cout << i << '\n';
 }
 ```
+### 初始化
