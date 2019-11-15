@@ -130,3 +130,28 @@ auto aa = alignof(a); //  int的对齐情况
 ```
 
 ## 声明
+在这种视角下,我们尽量用声明语句组成程序的接口。其中,同一个声明可以在不同文件中重复出现。负责申请内存空间的定义语句不属于接口。
+```
+char ch;  //  为一个char类型的变量分配内存空间并赋初值0
+auto count = 1; //  为一个int类型的变量分配内存空间并赋初值1
+const char* name = "Njal";  //  为一个指向char的指针分配内存空间
+    //  为字符串字面值常量"Njal"分配内存空间
+    //  用字符串字面值常量的地址初始化指针
+struct Date {int d,m,y;}; //  Date是一个struct,它包含3个成员
+int day(Date* p){return p->d;}  // day是一个函数，它执行某些既定的代码
+using Point = std::complex<short>;  //  Point是类型std::complex<short>的别名
+```
+
+在上面这些声明语句中，只有3个不是定义:
+```
+double sqrt(double);  //  函数声明
+extern int error_number;  //  变量声明
+struct User;  //  类型名字声明
+```
+
+也就是说，要想使用它们对应的实体，必须先在其他某处进行定义，例如:
+```
+douyble sqrt(double d){/*...*/}
+int error_number = 1;
+struct User {/* ... */};
+```
