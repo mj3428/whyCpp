@@ -155,3 +155,45 @@ douyble sqrt(double d){/*...*/}
 int error_number = 1;
 struct User {/* ... */};
 ```
+在同一实体的所有声明中，实体的类型必须保持一致，因此，下面的小片段包含两处错误：
+```
+int count;
+int count;  //  错误:重定义
+extern int error_number;
+extern shor error_number; //  错误：类型不匹配
+```
+有的定义语句为它们定义的实体显式地赋值，例如:
+```
+struct Date{int d,m,y;};
+using Point = std::complex<short>;  //  Point 是类型std::complex<short t>的别名
+int day(Date* p){return p->d;}
+const double pi {3.1415926535897};
+```
+### 声明的结构
+* 可选的前置修饰符（比如static和virtual）
+* 基本类型（比如vector<double>和const int）
+* 可选的声明符，可包含一个名字（比如p[7],n和*(*)[]）
+* 可选的后缀函数修饰符（比如const和noexcept）
+* 可选的初始化器或函数体(比如={7,5,3}和{return x;})  
+
+|**声明运算符**|||
+| :--- | :--- | :--- |
+|前缀|* |指针|
+|前缀|* const |常量指针|
+|前缀|* volatile |volatile指针|
+|前缀|& |左值引用|
+|前缀|&& |右值引用|
+|前缀|auto |函数（使用后置返回类型）|
+|后缀| [] |数组|
+|后缀| () |函数|
+|后缀| -> |从函数返回|  
+
+后缀声明符的绑定效果比前缀声明符更紧密，所以char* kings[]是char指针的数组，而char(* kings)[]是指向char数组的指针
+
+### 声明多个名字
+在声明语句中，运算符只作用于紧邻的一个名字，对于后续的其他名字是无效的。例如：
+```
+int* p,y; //  准确的含义是int* p;int y;而非int* y;
+int x, *q;  // int x;int* q;
+int v[10], *pv; //  int v[10];int* pv;
+```
