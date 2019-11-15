@@ -197,3 +197,19 @@ int* p,y; //  准确的含义是int* p;int y;而非int* y;
 int x, *q;  // int x;int* q;
 int v[10], *pv; //  int v[10];int* pv;
 ```
+### 名字
+第一个字符必须是字母  
+**一些有效的标识符如下:**
+```
+hello this_is_a_most_unusually_long_identifier_that_is_better_avoided
+DEFINED foO bAr u_name HorseSense
+var0 var1 CLASS _class ___
+```
+
+**无效的标识符:**
+```
+012   a fool  $sys  class 3var
+pay.due foo~bar .name if
+```
+以下划线开头的非局部名字表示具体实现及运行时环境中的某些特殊功能,应用程序中不应该使用这样的名字。类似地包含双下划线（__） 的名字
+和以下划线开头紧跟大写字母的名字（比如_Foo）都有特殊用途
