@@ -169,3 +169,27 @@ auto v3 {f()};  //  v3是某种类型的列表
   一个引用上，则它的生命周期就是引用的生命周期；否则，临时对象的生命周期与它所处的完整表达式一致。其中，完整表达式(full expression)不属于任何
   其他表达式。通常情况下，临时对象也是自动对象。  
 * **线程布局(thread-loacl)对象** 或者说声明为thread_local的对象：这样的对象随着线程的创建而创建，随着线程的销毁而销毁。  
+静态和自动被称为存储类(storage class)  
+数组元素和非静态类成员的生命周期由它们所属的对象决定  
+### 类型别名
+有时，我们需要为某种类型起个新名字。也有一方面是为了便于后期维护。  
+例如:
+```
+using Pchar = char*;  //  字符串指针
+using PF = int(*)(double);  //  函数指针，该函数接受一个double且返回一个int
+相似类型可以定义同一个名字作为成员别名:
+template<class T>
+class vector{
+  using value_type = T; // 每个容器都有一个value_type
+};
+
+template<class T>
+class list{
+  using value_type = T; //  每个容器都有一个value_type
+};
+```
+无论如何，类型别名绝不代表一种新类型，它只是某种已有类型的同义词。换句话说，别名就是类型的另外一个名字而已。例如：
+```
+Pchar p1 = nullptr; //  pl的类型是char*
+char* p3 = p1;  //  正确
+```
