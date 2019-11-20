@@ -171,3 +171,28 @@ void fp(char v[])
 }
 ```
 前置* 运算符执行解引用运算，因此 `*p`是指针p所指的字符，++运算令p指向数组的下一个元素。  
+内置数组的取下标操作是通过组合指针的+和 * 两种运算得到的， 对于内置数组a和数组范围之内的整数j，有下式成立：
+`a[j] == *(&a[0]+j) == *(a+j) == *(j+a) == j[a]`  
+人们常常会纠结于为什么alj==j[a],比如3["Texas"] == "Texas"[3]=='a',其实这种小聪明在实际的代码中并没有多少展示的空间。
+上面这些等价关系属于非常底层的规则,并不适用于array和vector等标准库  
+```
+template<typename T>
+int byte_diff(T* p, T* q)
+{
+  return reinterpret_cast<char*>(q)-reinterpret_cast<char*>(p);
+}
+
+void diff_test()
+{
+  int vi[10];
+  short vs[10];
+  cout << vi << '' << &vi[1] << '' << &vi[1]-&vi[0] << '' << byte_diff(&vi[0], &vi[1]) << '\n';
+  cout << vs << '' << &vs[1] << '' << &vs[1]-&vs[0] << '' << byte_diff(&vs[0], &vs[1]) << '\n';
+}
+```
+
+输出的结果是
+```
+0x7fffaef0 0x7fffaef4 1 4
+0x7fffaedc 0x7fffaede 1 2
+```
