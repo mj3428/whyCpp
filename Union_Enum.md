@@ -100,3 +100,32 @@ Flag f2 = Flag{5};  //  错误：不允许窄化转换成enum class类型
 Flag f3 = static_cast<Flag>(5); //  "不近人情"的转换
 Flag f4 = static_cast<Flag>(999); //  错误：999不是一个char类型的值（也许根本捕获不到）
 ```
+最后一条赋值语句很好地展示了为什么不允许从整数到枚举类型的隐式转换，因为绝大多数整数值根本不在一枚举类型的合理表示范围之内。  
+每个枚举值对应一个整数，我们可以显式地把这个整数抽取出来出来。例如:
+```
+int i = static_cast<int>(Flag::y);  //  i的值变为2
+char c = static_cast<char>(Flag::e);  //  c的值变为8
+```
+
+### 普通的enum
+普通的enum的枚举值位于enum本身所在的作用域中，它们隐式地转换成某些整数类型的值。
+```
+enum Traffic_light{red, yellow, green};
+enum Warning {green, yellow, orange, red};  //  火警等级
+
+//  错误:yellow被重复定义（取值相同）
+//  错误:red被重复定义（取值不同）
+
+Warning a1 = 7; //  错误:不存在int向Warning的类型转换
+int a2 = green; //  ok:green位于其作用域中，隐式地转换成int类型
+int a3 = Warning::green;  // ok:Warning向int的类型转换
+Warning a4 = Warning::green;  //  ok
+
+void f(Traffic_light x)
+{
+  if (x==9){/*...*/}  //  ok(但是Traffic_light并不包含枚举值9)
+  if (x==red){/*...*/}  //  错误:作用域中有两个red
+  if (x==Warning::red){/*...*/} //  ok(哎呦！)
+  if (x==Traffic_light::red){/*...*/} //  ok
+}
+```
