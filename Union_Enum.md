@@ -138,3 +138,17 @@ void foobar(Color_code* p); //  使用声明
 // ...
 enum Color_code:char {red,yellow,green,blue}; //  定义
 ```
+整数到普通enum的显式类型转换规则与转换为enum class的规则一样。稍有的一点区别是,当没有显式地指定基础类型时,除非该值位于
+枚举类型的范围之内,否则转换的结果是未定义的。例如：
+```
+enum Flag {x=1,y=2,z=4,e=8};  //  范围0:15
+
+Flag f0{};  //  f0的默认值是0
+Flag f1 = 5;  //  类型错误：5不是一个Flag
+Flag f2 = Flag{5};  //  错误：不存在int向Flag的显式类型转换
+Flag f2 = static_cast<Flag>(5);  //  ok:5在Flag的取值范围之内
+Flag f3 = static_cast<Flag>(z|e); //  12在Flag的取值范围之内
+Flag f4 = static_cast<Flag>(99);  //  未定义的：99不在Flag的取值范围之内
+```
+因为普通的enum和其他基础类型之间存在隐式类型转换，所以我们不需要为他专门定义运算符|：z和e会自动转换成int，因此z|e能够正常求值。
+对枚举类型求sizeof的结果等价于对其基础类型求sizeof的结果。
