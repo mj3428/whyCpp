@@ -129,3 +129,12 @@ void f(Traffic_light x)
   if (x==Traffic_light::red){/*...*/} //  ok
 }
 ```
+
+可以为普通的枚举指定基础类型，就像对enum class所做的一样。此时，允许先声明枚举类型，稍后再给出它的定义，例如:
+```
+enum Traffic_light:char{tl_red,tl_yellow,tl_green}; //  基础类型是char
+enum Color_code:char; //  声明
+void foobar(Color_code* p); //  使用声明
+// ...
+enum Color_code:char {red,yellow,green,blue}; //  定义
+```
