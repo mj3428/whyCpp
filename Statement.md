@@ -91,3 +91,28 @@ int sum(vector<int>& v)
 ```
 for (int x:v)读作“对于范围v中的每个元素x”，或者干脆说“对于v中分的每个x”.程序从头到尾依次访问v的全部元素。  
 冒号之后的表达式必须是一个序列，换句话说，如果我们对它调用v.begin()和v.end()或者是begin(v)和end(v)，得到的应该是迭代器。  
+- 编译器首先尝试寻找并使用成员begin和end。如果找到了begin和end，但是它们不能表示一个范围(begin有可能是变量而非函数)，则当前的
+  范围for是错误的
+- 如果没有找到，则编译器继续在外层作用域寻找begin/end成员。如果找不到或者找到的不能用（比如begin不接受当前序列类型的实参），则范围for是
+  错误的  
+
+如果想在范围for循环中修改元素的值，则应该使用元素的引用。如果，我们用下面的代码vector的每个元素都加1:
+```
+void incr(vector<int>& v)
+{
+  for (int& x:v)
+    ++x;
+}
+```
+引用还可以用于尺寸较大的元素，特别是当直接拷贝元素的值代价昂贵时。例如：
+```
+template<class T> T accum(vector<T>& v)
+{
+  T sum = 0;
+  for (const T& x:v)
+    sum += x;
+  return sum;
+}
+```
+
+### 
