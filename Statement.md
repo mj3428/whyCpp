@@ -115,4 +115,21 @@ template<class T> T accum(vector<T>& v)
 }
 ```
 
-### 
+### goto语句
+goto可以用来跳出嵌套的循环或者switch语句(break只能跳出最内层的循环或者switch语句)，这是它为数不多的有意义的用法之一。例如：
+```
+void do_something(int i, int j)
+  //  操作一个名为nm的二维矩阵
+{
+  for (i = 0;i!=n;++i)
+    for (j = 0; j!=m; ++j)
+      if (nm[i][j] == a)
+        goto found;
+  //  无关代码
+  // ...
+  found:
+    // nm[i][j] == a
+}
+```
+这个goto直接跳过了(退出了)整个循环。它既不会开启另一次循环,也不会进入到一个新作用域中。因此, goto的这种用法几乎
+不会给程序员带来任何麻烦和困扰。
