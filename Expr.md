@@ -25,3 +25,44 @@ void f(int x,int y)
 常量表达式是指由编译器求值的表达式。它不能包含任何编译时未知的值，也不能具有其他副作用。一条常量表达式由整数值、浮点数值或者枚举值等成分构成
 ，我们可以用运算或者生成常量值的constexpr函数把这些基本成分组合在一起。另外，某些常量表达式中还可以出现地址值。处于简化问题的考虑。  
 ### 常量表达式中的const
+const常用于表示接口。同时，const也可以表示常量值。例如:
+```
+const int x=7;
+const string s = "asdf";
+const int y = sqrt(x);
+```
+一场凉表达式初始化的const可以用在常量表达式中。与constexpr不同的是，const可以用非常量表达式初始化，但是此时该const将不能用作常量表达式。
+例如:
+```
+constexpr int xx = x; //  ok
+constexpr string ss = s;  //  错误：s不是常量表达式
+constexpr int yy = y; //  错误：sqrt(x)不是常量表达式
+```
+发生错误的原因是string不是字面值常量类型，sqrt()不是一个constexpr函数。  
+通常情况下，当定义简单的常量时，constexpr比const好。  
+### 地址常量表达式
+全局变量等静态分配的对象的地址是一个常量。然而,该地址值是由链接器赋值的,而非编译器。因此,编译器并不知道这类地址常量的值到
+底是多少。这就限制用类型的常量表达式的使例如:
+```
+constexpr const char* p1 = "asdf";
+constexpr cosnt char* p2 = p1;  //  ok
+constexpr const char* p2 = p1+2;  //  错误:编译器不知道p1本身的值是多少
+constexpr char c = p1[2]; //  ok,c=='d';编译器知道p1所指的值
+```
+
+## 隐式类型转换
+如果我们转换了某个值的类型，然后能够把它再转回原类型并且保持初始值不变，则称该转换是值保护的。相反，如果某个转换做不到这一点，那么
+它被称为**窄化类型转换** 
+### 提升
+保护值不被改变的隐式类型转换通常称为提升（promotion）  
+* 如果int能表示类型为char、signed char、unsigned char、short int或者unsigned short int的数据的值，则将该数据转换为int类型；否则，
+将它转换为unsigned int类型  
+* char16_t、char32_t、wchar_t或者普通枚举类型的数据转换成下列类型中第一个能够表示其全部值的类型:int、unsigned int、long、unsigned long
+或者unsigned long long
+* 如果位域的全部值都能用int表示，则它转换为int;否则，如果全部值能用unsigned int 表示，则它转换为unsigned int;如果int和unsigned int都
+不行，则不执行任何整型提升。
+* bool值转换成int，其中，false变为0而true变为1
+### 类型转换
+#### 指针和引用类型转换
+任何指向对象类型的指针都能隐式地转换成`void*`。指向派生类的指针（或引用）能隐式地转换成指向其可访问的且明确无二义的基类的指针，
+指向函数的指针和指向成员的指针不能隐式地转换成`void*`
