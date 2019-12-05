@@ -101,3 +101,33 @@ int main(int argc,char* argv[])
 }
 ```
 delete和delete[]必须清楚分配的对象有多大，才能准确地释放new分配的空间。
+切记不要用new创建局部对象，例如:
+```
+void f1()
+{
+  X* p = new X;
+  //...使用*p...
+  delete p;
+}
+```
+这种用法冗长、低效且极易出错。如果先有return语句或者抛出异常的语句后有delete，则可能导致内存泄漏。相反，使用局部变量可以解决这一问题：
+```
+void f2()
+{
+  X x;
+  // ...使用x...
+}
+```
+在退出f2之前，先隐式地销毁局部变量x.  
+
+### 重载new
+如果我们想把对象放置在别的地方，可以提供一个含有额外实参的分配函数，然后在 使用new的时候传入指定的额外实参：
+```
+void* operator new(size_t,void* p){return p;} //  显式运算符，将对象置于别处
+
+void* buf = reinterpret_cast<void*>(0xF00F);  //  一个明确的地址
+X* p2 = new(buf) X; //  在buf处构建X 调用:operator new(sizeof(X),buf)
+```
+由于这种用法的存在，我们通常把提供额外的实参给operator new()的new(buf) X语法称为放置语法。请注意，每个operator new()都接受一个
+尺寸作为它的第一个实参，而该尺寸的对象是隐式提供的。编译器根据常规的实参匹配规则确定new运算符到底使用哪个operator new()。每个operator
+new()都以size_t作为它的第一个实参
