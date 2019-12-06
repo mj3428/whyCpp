@@ -172,3 +172,27 @@ void f(int i)
 ```
 ### 未限定列表
 当我们明确知道所用类型时，可以使用未限定列表。
+
+## lambda表达式
+### 实现模型
+如果把lambda表达式看成是一种定义并使用函数对象的便捷方式，将非常有助于我们理解lambda表达式的语义。有个相对简单的例子：
+```
+void print_modulo(const vector<int>& v,ostream& os,int m)
+  //  如果v[i]%m==0,则输出v[i]到os
+{
+  for_each(begin(v),end(v),
+      [&os,m](int x){if (x%m==0) os << x <<'\n';}
+  );
+}
+```
+要想理解上述代码的含义，我们不妨定义一个等价的函数对象:
+```
+class Modulo_print{
+  ostream& os;  //  用于存放捕获列表的成员
+  int m;
+public:
+  Mpdulo_print(ostream& s, int mm) :os(s), m(mm){}  //  捕获
+  void operator()(int x)const
+    {if (x%m == 0) os << x << '\n';}
+}
+```
