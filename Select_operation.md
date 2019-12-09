@@ -220,3 +220,17 @@ void print_modulo(const C& v,ostream& os, int m)
     if (x%m==0) os << x << '\n';
 }
 ```
+
+用for语句遍历一个map会进行深度优先遍历。我们应该如何进行宽度优先遍历呢？for循环版本的print_modulo难以修改为宽度优先遍历，因此我们必须将
+for改写为一个算法。例如:
+```
+template<class C>
+void print_modulo(const C& v, ostream& os, int m)
+  // v[i]%m==0,则输出v[i]到os
+{
+  breadth_first(begin(v),end(v),
+    [&os,m](int x){if(x%m==0) os << x << '\n';}
+  );
+}
+```
+其中，我们以算法的形式表示一个泛化的循环、遍历，而lambda表达式是它的“主体”。使用for_each代替breadth_first就会进行深度优先遍历。
