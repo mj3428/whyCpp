@@ -196,3 +196,27 @@ public:
     {if (x%m == 0) os << x << '\n';}
 }
 ```
+lambda的主题部分变为了operator()()的函数体。因为lambda并不返回值，所以operator()()是void。默认情况下，operator()()是const,因此
+在lambda体内部无法修改捕获的变量，这也是目前为止最常见的情况。如果你确实希望在lambda的内部修改其状态，则应该把它声明为mutable。当然，
+此时对应的operataor()()就不能声明为const了  
+### lambda的替代品
+对于使用for_each()的lambda表达式来说，我们可以编写一个for循环作为替代。例如:
+```
+void print_modulo(const vector<int>& v, ostream& os, int m)
+  // 如果v[i]%m==0,则输出v[i]到os
+{
+  for (auto x:v)
+    if (x%m==0) os << x << '\n';
+}
+```
+
+for_each毕竟是种太特殊的算法，同时vector<int> 也只是一种特殊的容器。我们泛化print_modulo() ,令其可以处理更多容器类型： 
+```
+template<class C>
+void print_modulo(const C& v,ostream& os, int m)
+  // v[i]%m==0,则输出v[i]到os
+{
+  for (auto x:v)
+    if (x%m==0) os << x << '\n';
+}
+```
