@@ -260,3 +260,29 @@ void f(vector<int>& v)
   );
 }
 ```
+## 显式类型中转换
+一旦我们再程序中使用目标作为显式的限定，则在这种情况下就不允许行为不正常的类型转换，例如:
+```
+void g2(char* p)
+{
+  int x = int{p}; //  错误：不存在char*向int的类型转换
+  using Pint = int*;
+  int* p2 = Pint{p};  //  错误：不存在char*向int*的类型转换
+  // ...
+}
+```
+
+当reinterpret_cast的结果能被精确地转换回原始类型时，该结果才是可用的。请注意，reinterpret_cast必须作用于函数指针。考虑如下的情况：
+```
+char x = 'a';
+int* p1 = &x; //  错误:不错在char*向int*的隐式类型转换
+int* p2 = static_cast<int*>(&x);  //  错误:不存在char*向int*的隐式类型转换
+int* p3 = reinterpret_cast<int*>(&x)  //  OK:责任自负
+
+struct B{/*...*/};
+struct D:B{/*...*/};
+
+B* pb = new D;  //  ok:D*:向B*的隐式类型转换
+D* pd = pb; //  错误:不存在B*向D*的隐式类型转换
+D* pd = static_cast<D*>(pb);  //  OK
+```
