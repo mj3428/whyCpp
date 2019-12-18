@@ -25,4 +25,28 @@ int do_task()
     throw Some_error{};
 }
 ```
-### 
+### 层次化错误处理
+偶尔也需要从一种错误报告模式转换成另外一种。例如，我们可能会检查errno的值，在调用C语言库后抛出异常；反之，也可能从C++库返回C程序前捕获
+异常并设置errno:
+```
+void callC()  //  在C++中调用C函数，把errno转换成throw
+{
+  errno = 0;
+  c_function();
+  if (errno){
+    //  ..如果可能且必要的话，执行局部清理
+    throw C_blewit(errno);
+  }
+}
+
+extern "C" void call_from_C() noexcept  //  在C语言中调用一个C++函数，把throw转换成errno
+{
+  try{
+    c_plus_plus_function();
+  }
+  catch (...){
+    //  如果可能且必要的话，执行局部清理
+    errno = E_CPLPLFCTBLEWIT;
+  }
+}
+```
