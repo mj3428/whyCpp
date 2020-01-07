@@ -26,3 +26,18 @@ public:
   // ...
 };
 ```
+
+默认情况下，应该将单参数的构造函数声明为explicit。除非你又很好的理由，否则的话应该按这种默认方式做(例如complex)。如果定义隐式构造函数，最好写下
+原因，否则代码的维护者可能怀疑你疏忽了，或是不懂这一原则。  
+如果一个构造函数声明为explicit且定义在类外，则在定义中不能重复explicit：
+```
+class Date{
+  int d, m, y;
+public:
+  explicit Date(int dd);
+  // ...
+};
+
+Date::Date(int dd){/* ... */} //  正确
+explicit Date:Date(int dd){/* ... */} //  错误
+```
