@@ -142,3 +142,25 @@ r = &i; //  r引用了一个指针，因此给r赋值&i就是令p指向i
 *r = 0; //  解引用r得到i，也就是P指向的对象，将i的值改为0
 ```
 ## const限定符
+因为const对象一旦创建后其值就不能再改变，所以const对象必须初始化。一如既往，初始值可以是任意复杂的表达式:
+```cpp
+const int i = get_size(); //  正确：运行时初始化
+const int j = 42; //  正确:编译时初始化
+const int k;  //  错误:k是一个未经初始化的常量
+```
+**默认状态下，const对象仅在文件内有效** 如果程序包含多个文件，则每个用了const对象的文件都必须得能访问到它的初始值才行。要做到
+这点，就必须再每个用到变量的文件中都有对它的定义。**但是要在其他文件访问也是可以做到的，即添加extern关键字**   
+```cpp
+//  file_1.cc定义并初始化了一个常量，该常量能被其他文件访问
+extern const int bufSize = fcn();
+//  file_1.h 头文件
+extern const int bufSize; //  与file_1.cc中定义的bufSize是同一个
+```
+因为bufSize是一个常量，必须用extern加以限定被其他文件使用。  
+### const的引用
+可以把引用绑定到const对象上，就像绑定到其他对象上一样，我们称之为**对常量的引用(reference to const)**   
+```cpp
+const int ci = 1024;
+const int &r1 = ci; //  正确:引用及其对应的对象都是常量
+int &r2 = ci; //  错误:试图让一个非常量引用指向一个常量对象
+```
