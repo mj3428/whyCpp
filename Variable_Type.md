@@ -182,3 +182,10 @@ double *ptr = &pi;  //  错误:ptr是一个普通指针
 const double *cptr = &pi; //  正确:ctpr可以指向一个双精度常量
 *cptr = 42  //  错误：不能给*cptr赋值
 ```
+#### const指针
+```cpp
+int errNumb = 0;
+int *const curErr = &errNumb; //  curErr将一直指向errNumb
+const double pi = 3.14159;
+const double *const pip = &pi;  //  pip是一个指向常量对象的常量指针
+```
