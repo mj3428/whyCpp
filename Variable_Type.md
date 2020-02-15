@@ -189,3 +189,22 @@ int *const curErr = &errNumb; //  curErr将一直指向errNumb
 const double pi = 3.14159;
 const double *const pip = &pi;  //  pip是一个指向常量对象的常量指针
 ```
+> 说明下面的这些定义是什么意思，挑出其中不合法的
+```cpp
+int i, *const cp;       // 不合法, const 指针必须初始化
+int *p1, *const p2;     // 不合法, const 指针必须初始化
+const int ic, &r = ic;  // 不合法, const int 必须初始化
+const int *const p3;    // 不合法, const 指针必须初始化
+const int *p;           // 合法. 一个指针，指向 const int
+```
+
+> 假设已有上一个练习中定义的那些变量，则下面的哪些语句是合法的？请说明原因。
+```cpp
+i = ic;     // 合法, 常量赋值给普通变量
+p1 = p3;    // 不合法, p3 是const指针不能赋值给普通指针
+p1 = &ic;   // 不合法, 普通指针不能指向常量
+p3 = &ic;   // 合法, p3 是常量指针且指向常量
+p2 = p1;    // 合法, 可以将普通指针赋值给常量指针
+ic = *p3;   // 合法, 对 p3 取值后是一个 int 然后赋值给 ic
+```
+### 顶层const
