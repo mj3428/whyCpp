@@ -208,3 +208,17 @@ p2 = p1;    // 合法, 可以将普通指针赋值给常量指针
 ic = *p3;   // 合法, 对 p3 取值后是一个 int 然后赋值给 ic
 ```
 ### 顶层const
+比较特殊的是，指针类型既可以是顶层const也可以是底层const，这一点和其他类型相比区别明显:
+```cpp
+int i = 0;
+int *const p1 = &i; //  不能改变p1的值，这是一个顶层const
+const int ci = 42;  //  不能改变ci的值，这是一个顶层const
+const int *p2 = &ci;  //  允许改变p2的值，这是一个底层const
+const int *const *p3 = p2;  //  靠右的const是顶层const,靠左的是底层const
+const int &r = ci;  //  用于声明引用的const都是底层const
+```
+当执行对象的拷贝操作时，常量是顶层const还是底层const区别明显。其中，顶层的const不受什么影响:
+```cpp
+i = ci; //  正确：拷贝ci的值，ci是一个顶层const，对此操作无影响
+p2 = p3;  //  正确:p2和p3指向的对象类型相同，p3顶层const的部分不影响
+```
