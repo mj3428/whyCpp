@@ -231,3 +231,10 @@ p2 = &i;  //  正确:int*能转换成const int*
 int &r = ci;  //  错误:普通的int&不能绑定到int常量上
 const int &r2 = i;  //  正确:const int&可以绑定到一个普通Int上
 ```
+> 对于下面的这些语句，请说明对象被声明成了顶层const还是底层const？
+```cpp
+const int v2 = 0; int v1 = v2;
+int *p1 = &v1, &r1 = v1;
+const int *p2 = &v2, *const p3 = &i, &r2 = v2;
+```
+v2 是顶层const(不能改变v2的值)，p2 是底层const，p3 既是顶层const又是底层const，r2 是底层const。
