@@ -239,3 +239,12 @@ const int *p2 = &v2, *const p3 = &i, &r2 = v2;
 ```
 v2 是顶层const(不能改变v2的值)，p2 是底层const，p3 既是顶层const又是底层const，r2 是底层const。
 ### constexpr和常量表达式
+**常量表达式** 是指值不会改变并且在编译过程就能得到计算结果的表达式。显然，字面值属于常量表达式，用常量表达式初始化的const对象也是常量
+表达式。  
+```cpp
+const int max_files = 20; //  max_files是常量表达式
+const int limit = max_files + 1;  //  limit是常量表达式
+int staff_size = 27;  //  staff_size不是常量表达式
+const int sz = get_size();  //  sz不是常量表达式
+```
+#### constexpr变量
