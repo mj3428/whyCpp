@@ -265,3 +265,13 @@ p和q的类型相差甚远，p是一个指向常量的指针，而q是一个常�
 ### 类型别名
 新标准规定了一种新的方法，使用别名声明来定义类型的别名:`using SI = Sales_item; //  SI是Sales_item的同义词`这种方法用关键字
 using作为别名声明的开始，其后紧跟别名和等号，其作用是把等号左侧的名字规定成符号右侧类型的别名。
+#### 指针、常量和类型别名
+如果某个类型别名指代的是复合类型或常量，那么把它用到声明语句里就会产生意想不到的后果。例如下面的声明语句用到了类型pstring，它实际上是
+类型`char*`的别名:
+```cpp
+tyoedef char *pstring;
+const pstring cstr = 0; //  cstr是指向char的常量指针
+const pstring *ps;  //  ps是一个指针，它的对象是指向char的常量指针
+```
+pstring实际上是指向char的指针，因此，const pstring就是zhixiangchar的常量指针，而非指向常量字符的指针。  
+
