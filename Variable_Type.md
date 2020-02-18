@@ -238,3 +238,4 @@ int *p1 = &v1, &r1 = v1;
 const int *p2 = &v2, *const p3 = &i, &r2 = v2;
 ```
 v2 是顶层const(不能改变v2的值)，p2 是底层const，p3 既是顶层const又是底层const，r2 是底层const。
+### constexpr和常量表达式
