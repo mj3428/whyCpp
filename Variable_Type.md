@@ -248,3 +248,16 @@ int staff_size = 27;  //  staff_size不是常量表达式
 const int sz = get_size();  //  sz不是常量表达式
 ```
 #### constexpr变量
+允许将变量声明为constexpr类型以便由编译器来验证变量的值是否是一个常量表达式。声明为constexpr的变量一定是一个常量，而且必须用常量表达式初始化:
+```cpp
+constexpr int mf = 20;  //  20时常量表达式
+constexpr int limit = mf + 1; //  mf+1是常量表达式
+constexpr int sz = size();  //  只有当size是一个constexpr函数时才是一条正确的声明语句
+```
+#### 指针和constexpr
+必须明确一点，在constexpr声明中如果定义了一个指针，限定符constexpr仅对指针有效，与指针所指的对象无关:
+```cpp
+const int *p = nullptr; //  p是一个指向整型常量的指针
+constexpr int *q = nullptr; //  q是一个指向整数的常量指针
+```
+p和q的类型相差甚远，p是一个指向常量的指针，而q是一个常量指针，其中的关键在于constexpr把它所定义的对象置为了顶层const。  
