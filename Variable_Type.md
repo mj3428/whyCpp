@@ -299,3 +299,31 @@ auto &g = ci; // g是一个整型常量引用，绑定到ci
 auto &h = 42; //  错误:不能为非常量引用绑定字面值
 const auto &j = 42; //  正确：可以为常量引用绑定字面值
 ```
+### decltype和引用
+```cpp
+// decltype的结果可以是引用类型
+int i = 42, *p = &i, &r = i;
+decltype(r+0) b;  // 正确：加法的结果是int，因此b是一个(未初始化的)int
+decltype(*p) c; //  错误:c是int&,必须初始化
+```
+因为r是一个引用，因此decltype(r)的结果是引用类型。如果想让结果类型是r所指的类型，可以把r作为表达式的一部分，如r+0，显然这个表达式的结果将是
+一个具体值而非一个引用。  
+另一方面，如果表达式的内容是解引用操作，则decltype将得到引用类型。正如我们所熟悉的那样，解引用指针可以得到指针所指的对象，而且还能给这个对象，
+而且还能给这个对象赋值。因此，`decltype(*p)`的结果类型就是int&,而非int.  
+有一种情况需要特别注意:对于decltype所用的表达式来说，如果变量名叫上了一对括号，则得到的类型与不加括号时会有不同，如果decltype使用的是一个
+不加括号的变量，则得到的结果就是该变量的类型：如果给变量加上了一层或多层括号，编译器就会把它当成是一个表达式。变量是一种可以作为复制语句左值
+的特殊表达式，所以这样的decltype就会得到引用类型:
+```cpp
+//  decltype的表达式如果是加上了括号的变量，结果将是引用
+decltype((i)) d;  //  错误:d是int&,必须初始化
+decltype(i) e;  //  正确:e是一个(未初始化的)int
+```
+> decltype((variable))(注意是双层括号)的结果永远是引用，而decltype(varaiable)结果只有当varaiable本身就是一个引用时才是引用。  
+题:
+> 判断下列定义推断出的类型是什么，然后编写程序进行验证  
+```cpp
+const int i = 42;
+auto j = i; const auto &k = i; auto *p = &i; 
+const auto j2 = i, &k2 = i;
+```
+`j 是 int，k 是 const int的引用，p 是const int *，j2 是const int，k2 是 const int 的引用`
