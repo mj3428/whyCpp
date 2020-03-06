@@ -344,3 +344,27 @@ struct Sales_data {/*...*/} accum, trans, *salesptr;  //  与上一条语句等�
 struct Sales_data {/*...*/};
 Sales_Data accum, trans *salesptr;
 ```
+### 编写自己的头文件
+为了确保各个文件中类的定义一致，类通常被定义在头文件中，而且类所在头文件的名字应与类的名字一样。例如，库类型string在名为string的头文件中
+定义。又如，我们应该把Salses_data类定义在名为Sales_data.h的头文件中。  
+头文件通常包含那些只能被定义一次的实体，如类、const和constexpr变量等。  
+#### 预处理
+确保头文件多次包含仍能安全工作的常用技术是**预处理器(preprocessor)**  
+预处理变量有两种状态:已定义和未定义  
+`#denfine`指令把一个名字设定为预处理变量，另外两个指令则分别检查某个指定预处理变量是否已经定义:`#ifdef`当且仅当变量已定义时为真，
+`#ifndef`当且仅当变量未定义时为真。一旦检查结果为真，则执行后续操作直至遇到`#endif`指令为止。  
+比如:
+```cpp
+#ifndef SALES_DATA_H
+#define SALES_DATA_H
+#include <string>
+struct Sales_data{
+  std::string bookNo;
+  unsigned units_sold = 0;
+  double revenue = 0.0;
+};
+# endif
+```
+第一次包含Sales_data.h时，#ifndef的检查结果为真，预处理器将顺序执行后面的操作直至遇到#endif为止。此时，预处理变SALES_DATA_H的值将变为已定义，
+而且Sales_data.h也会被拷贝到我们的程序中来。后面如果再一次包含Sales_data.h，则`#ifndef`的检查结果将为假，编译器将忽略`#ifndef`到`#endif`
+之间的部分。  
