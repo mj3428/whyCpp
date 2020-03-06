@@ -326,4 +326,21 @@ const int i = 42;
 auto j = i; const auto &k = i; auto *p = &i; 
 const auto j2 = i, &k2 = i;
 ```
-`j 是 int，k 是 const int的引用，p 是const int *，j2 是const int，k2 是 const int 的引用`
+`j 是 int，k 是 const int的引用，p 是const int *，j2 是const int，k2 是 const int 的引用`  
+
+### 自定义数据结构
+直接上例子
+```cpp
+struct Sales_data{
+  std::string bookNo;
+  unsigned units_sold = 0;
+  double revenue = 0.0
+};
+```
+花括号内为作用域，类内部定义的名字必须唯一，但是可以与类外部定义的名字重复。  
+另外，类体右侧的表示结束的花括号后必须写一个分号。因为类体后面可以紧跟变量名以示该对类型对象的定义，所以分号必不可少:
+```cpp
+struct Sales_data {/*...*/} accum, trans, *salesptr;  //  与上一条语句等价但可能更好一些
+struct Sales_data {/*...*/};
+Sales_Data accum, trans *salesptr;
+```
