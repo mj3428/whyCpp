@@ -26,4 +26,11 @@ string初始化表达方式
 |string s2(s1)  s2是s1的副本|
 |string s3("value") s3是字面值"value"的副本，除了字面值最后的那个空字符外|
 |string s3 = "value"  等价于上面的示例，s3是字面值"value"的副本|
-|string s4(n, 'c') 把s4初始化为由连续n个字符c组成的串|
+|string s4(n, 'c') 把s4初始化为由连续n个字符c组成的串|  
+
+**例题:**  
+```cpp
+string s;
+cout << s[0] << endl;
+```
+此做法不合理，因为s[0]对应是空字符串 不能对空字符串使用下标
